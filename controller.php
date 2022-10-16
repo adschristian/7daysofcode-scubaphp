@@ -6,12 +6,11 @@ function do_register()
     if ($requestMethod === 'GET') {
         return render_view('register');
     }
-    $personData = $_POST['person'];
-    if (empty($personData)) {
-        http_response_code(400);
-
-        return 'invalid data was sent';
+    $personData = $_POST['person'] ?? false;
+    if ($personData === false) {
+        return render_view('register');
     }
+    unset($personData['password-confirm']);
     if (crud_create($personData)) {
         header('Location: /?page-login');
         die;
